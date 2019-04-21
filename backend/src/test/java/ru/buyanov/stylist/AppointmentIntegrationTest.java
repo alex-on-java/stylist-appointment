@@ -44,4 +44,17 @@ public class AppointmentIntegrationTest {
 
         assertEquals(1, appointmentRepository.findAll().size());
     }
+
+    @Test
+    void test_getConflictTryingToAddAppointmentToTheSameSlotStylistAndDate() throws Exception {
+        MockHttpServletRequestBuilder request = post("/appointments")
+                .contentType("application/json")
+                .content("{ \"slotDefinitionId\": 1, \"stylistId\": 1, \"customerId\": 2, \"date\": \"01.01.1971\" }");
+
+        mvc.perform(request)
+                .andExpect(status().isCreated());
+
+        mvc.perform(request)
+                .andExpect(status().isConflict());
+    }
 }
