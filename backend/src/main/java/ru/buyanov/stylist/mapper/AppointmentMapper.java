@@ -7,4 +7,5 @@ import ru.buyanov.stylist.model.Appointment;
 @Mapper(componentModel = "spring")
 public interface AppointmentMapper {
     Appointment create(AppointmentDto dto);
+    AppointmentDto toDto(Appointment entity);
 }

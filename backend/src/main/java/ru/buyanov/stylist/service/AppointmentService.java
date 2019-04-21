@@ -2,6 +2,7 @@ package ru.buyanov.stylist.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.buyanov.stylist.dto.AppointmentDto;
 import ru.buyanov.stylist.mapper.AppointmentMapper;
 import ru.buyanov.stylist.model.Appointment;
@@ -13,8 +14,10 @@ public class AppointmentService {
     private final AppointmentRepository repository;
     private final AppointmentMapper mapper;
 
-    public void createAppointment(AppointmentDto dto) {
+    @Transactional
+    public AppointmentDto createAppointment(AppointmentDto dto) {
         Appointment appointment = mapper.create(dto);
-        repository.save(appointment);
+        Appointment savedAppointment = repository.save(appointment);
+        return mapper.toDto(savedAppointment);
     }
 }

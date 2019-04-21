@@ -20,7 +20,8 @@ public class AppointmentController {
 
     @RequestMapping(method = POST)
     public ResponseEntity<Void> createNewSlot(@RequestBody AppointmentDto dto) {
-        service.createAppointment(dto);
-        return ResponseEntity.created(URI.create("/slots/1")).build();
+        AppointmentDto createdAppointmentDto = service.createAppointment(dto);
+        URI location = URI.create(String.format("/appointments/%d", createdAppointmentDto.getId()));
+        return ResponseEntity.created(location).build();
     }
 }
