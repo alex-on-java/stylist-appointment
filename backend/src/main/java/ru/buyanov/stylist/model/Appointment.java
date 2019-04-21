@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
@@ -15,13 +14,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(schema = "sa", name = "appointment")
-@IdClass(SlotPK.class)
 public class Appointment {
     @Id
+    int id;
     int slotDefinitionId;
-    @Id
     int stylistId;
-    @Id
     LocalDate date;
     int customerId;
 }

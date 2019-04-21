@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AppointmentDto {
+    int id;
     int slotDefinitionId;
     int stylistId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")

@@ -10,17 +10,13 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import ru.buyanov.stylist.model.SlotPK;
 import ru.buyanov.stylist.repository.AppointmentRepository;
 
-import java.time.LocalDate;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -44,6 +40,6 @@ public class AppointmentIntegrationTest {
         mvc.perform(request)
                 .andExpect(status().isCreated());
 
-        assertTrue(appointmentRepository.findById(new SlotPK(1, 1, LocalDate.of(1971, 1, 1))).isPresent());
+        assertEquals(1, appointmentRepository.findAll().size());
     }
 }
