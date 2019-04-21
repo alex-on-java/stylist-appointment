@@ -27,11 +27,7 @@ public class AppointmentService {
         int availableStylist = stylistRepository.fetchFirstStylistIdThatIsNotInList(busyStylistIds)
                 .orElseThrow(() -> new AppointmentConflictException(dto));
         Appointment newAppointment = mapper.create(dto, availableStylist);
-        try {
-            Appointment savedAppointment = appointmentRepository.save(newAppointment);
-            return mapper.toDto(savedAppointment);
-        } catch (DataIntegrityViolationException e) {
-            throw new AppointmentConflictException(e);
-        }
+        Appointment savedAppointment = appointmentRepository.save(newAppointment);
+        return mapper.toDto(savedAppointment);
     }
 }
