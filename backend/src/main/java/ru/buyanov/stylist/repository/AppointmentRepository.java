@@ -1,7 +1,10 @@
 package ru.buyanov.stylist.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.buyanov.stylist.model.Appointment;
+import ru.buyanov.stylist.model.projection.BusySlot;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -16,4 +19,15 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
                 .map(Appointment::getStylistId)
                 .collect(Collectors.toList());
     }
+
+    @Query( "SELECT " +
+            "  new ru.buyanov.stylist.model.projection.StylistsBusyPerDay(" +
+            "    a.date, " +
+            "    a.slotDefinitionId " +
+            "  )" +
+            "FROM Appointment a " +
+            "GROUP BY a.date, a.slotDefinitionId " +
+            "HAVING count(a.stylistId) >= :maxNumberOfStylists")
+    Collection<BusySlot> fetchNotAvailableSlots(@Param("maxNumberOfStylists") long maxNumberOfStylists);
+
 }
