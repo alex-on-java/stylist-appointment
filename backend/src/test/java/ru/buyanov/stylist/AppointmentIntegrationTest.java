@@ -36,7 +36,7 @@ public class AppointmentIntegrationTest {
     void test_createNewAppointmentForExistingStylist() throws Exception {
         MockHttpServletRequestBuilder request = post("/appointments")
                 .contentType("application/json")
-                .content("{ \"slotDefinitionId\": 1, \"stylistId\": 1, \"customerId\": 1, \"date\": \"1971-01-01\" }");
+                .content("{ \"slotDefinitionId\": 1, \"customerId\": 1, \"date\": \"1971-01-01\" }");
 
         mvc.perform(request)
                 .andExpect(status().isCreated())
@@ -49,7 +49,7 @@ public class AppointmentIntegrationTest {
     void test_getConflictTryingToAddAppointmentToTheSameSlotStylistAndDate() throws Exception {
         MockHttpServletRequestBuilder request = post("/appointments")
                 .contentType("application/json")
-                .content("{ \"slotDefinitionId\": 1, \"stylistId\": 1, \"customerId\": 2, \"date\": \"1971-01-01\" }");
+                .content("{ \"slotDefinitionId\": 1, \"customerId\": 2, \"date\": \"1971-01-01\" }");
 
         mvc.perform(request)
                 .andExpect(status().isCreated());

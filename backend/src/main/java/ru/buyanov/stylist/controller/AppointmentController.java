@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.buyanov.stylist.dto.AppointmentCreationDto;
 import ru.buyanov.stylist.dto.AppointmentDto;
 import ru.buyanov.stylist.service.AppointmentService;
 
@@ -19,7 +20,7 @@ public class AppointmentController {
     private final AppointmentService service;
 
     @RequestMapping(method = POST)
-    public ResponseEntity<Void> createNewSlot(@RequestBody AppointmentDto dto) {
+    public ResponseEntity<Void> createNewAppointment(@RequestBody AppointmentCreationDto dto) {
         AppointmentDto createdAppointmentDto = service.createAppointment(dto);
         URI location = URI.create(String.format("/appointments/%d", createdAppointmentDto.getId()));
         return ResponseEntity.created(location).build();
