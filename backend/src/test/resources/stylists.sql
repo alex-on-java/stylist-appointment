@@ -1,0 +1,1 @@
+INSERT INTO sa.stylist ("name", email) VALUES ('Vlad Mihalcea', 'vladmihalcea@hibernate.com')
