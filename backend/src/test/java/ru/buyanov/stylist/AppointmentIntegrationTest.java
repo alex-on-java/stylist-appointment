@@ -11,7 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import ru.buyanov.stylist.model.SlotPK;
-import ru.buyanov.stylist.repository.SlotRepository;
+import ru.buyanov.stylist.repository.AppointmentRepository;
 
 import java.time.LocalDate;
 
@@ -28,15 +28,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @AutoConfigureEmbeddedDatabase
 @Sql(value = "/stylists.sql", executionPhase = BEFORE_TEST_METHOD)
 @Sql(value = "/clear.sql", executionPhase = AFTER_TEST_METHOD)
-public class SlotIntegrationTest {
+public class AppointmentIntegrationTest {
     @Autowired
     private MockMvc mvc;
 
     @Autowired
-    private SlotRepository slotRepository;
+    private AppointmentRepository appointmentRepository;
 
     @Test
-    void test_createNewSlotForExistingStylist() throws Exception {
+    void test_createNewAppointmentForExistingStylist() throws Exception {
         MockHttpServletRequestBuilder request = post("/appointments")
                 .contentType("application/json")
                 .content("{ \"slotDefinitionId\": 1, \"stylistId\": 1, \"customerId\": 1, \"date\": \"01.01.1971\" }");
@@ -44,6 +44,6 @@ public class SlotIntegrationTest {
         mvc.perform(request)
                 .andExpect(status().isCreated());
 
-        assertTrue(slotRepository.findById(new SlotPK(1, 1, LocalDate.of(1971, 1, 1))).isPresent());
+        assertTrue(appointmentRepository.findById(new SlotPK(1, 1, LocalDate.of(1971, 1, 1))).isPresent());
     }
 }

@@ -14,9 +14,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(schema = "sa", name = "slot")
+@Table(schema = "sa", name = "appointment")
 @IdClass(SlotPK.class)
-public class Slot {
+public class Appointment {
     @Id
     int slotDefinitionId;
     @Id

@@ -1,4 +1,4 @@
-CREATE TABLE sa.slot (
+CREATE TABLE sa.appointment (
   customer_id         INT    NOT NULL,
   slot_definition_id  INT    NOT NULL REFERENCES sa.slot_definition(id),
   stylist_id          INT    NOT NULL REFERENCES sa.stylist(id),
