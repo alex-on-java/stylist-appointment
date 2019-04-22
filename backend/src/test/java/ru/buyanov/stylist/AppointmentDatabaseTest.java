@@ -30,9 +30,12 @@ public class AppointmentDatabaseTest {
     @Autowired
     private AppointmentRepository repository;
 
+    private final LocalDate firstDate = LocalDate.parse("2010-10-10");
+    private final LocalDate lastDate = LocalDate.parse("2010-10-11");
+
     @Test
     public void test_loadAllListedDatesAndSlotsForZeroStylists() {
-        Collection<BusySlot> stats = repository.fetchNotAvailableSlots(0);
+        Collection<BusySlot> stats = repository.fetchNotAvailableSlots(0, firstDate, lastDate);
 
         assertEquals(5, stats.size());
     }
@@ -41,7 +44,16 @@ public class AppointmentDatabaseTest {
     public void test_loadForActualNumberOfStylists() {
         Collection<BusySlot> expected = Collections.singletonList(new BusySlot(LocalDate.parse("2010-10-10"), 1));
 
-        Collection<BusySlot> actual = repository.fetchNotAvailableSlots(3);
+        Collection<BusySlot> actual = repository.fetchNotAvailableSlots(3, firstDate, lastDate);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void test_loadNothingIfDatesAreNotMatch() {
+        Collection<BusySlot> expected = Collections.emptyList();
+
+        Collection<BusySlot> actual = repository.fetchNotAvailableSlots(0, lastDate.plusDays(1), lastDate.plusDays(2));
 
         assertEquals(expected, actual);
     }

@@ -26,8 +26,14 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             "    a.slotDefinitionId " +
             "  )" +
             "FROM Appointment a " +
+            "WHERE a.date BETWEEN :dateFrom AND :dateTo " +
             "GROUP BY a.date, a.slotDefinitionId " +
             "HAVING count(a.stylistId) >= :maxNumberOfStylists")
-    Collection<BusySlot> fetchNotAvailableSlots(@Param("maxNumberOfStylists") long maxNumberOfStylists);
+    Collection<BusySlot> fetchNotAvailableSlots(
+            @Param("maxNumberOfStylists") long maxNumberOfStylists,
+            @Param("dateFrom") LocalDate dateFrom,
+            @Param("dateTo") LocalDate dateTo
+
+    );
 
 }
