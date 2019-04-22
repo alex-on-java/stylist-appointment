@@ -11,7 +11,6 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -70,31 +69,36 @@ public class AvailabilityCalculationLogicTest {
     public void test_dayIsEmptyIfAllSlotsAreBusy() {
         Collection<BusySlot> allBusy = combine(busyDate(firstDate, 1, 2, 3, 4));
 
-        AvailabilityListDto actual = logic.calculateAvailableSlots(allBusy, slots, firstDate, firstDate);
-        Iterator<DateAvailability> daysIterator = actual.getDays().iterator();
+        List<SlotDto> notAvailableSlots = logic.calculateAvailableSlots(allBusy, slots, firstDate, firstDate)
+                .getDays().stream()
+                .map(DateAvailability::getSlots)
+                .flatMap(Collection::stream)
+                .filter(slot -> !slot.isAvailable())
+                .collect(Collectors.toList());
 
-        assertTrue(daysIterator.hasNext());
-        assertTrue(daysIterator.next().getSlots().isEmpty());
+        assertEquals(slots.size(), notAvailableSlots.size());
     }
 
     @Test
     public void test_allSlotsAreAvailable() {
         Collection<BusySlot> noBusy = Collections.emptyList();
-        Collection<SlotDto> tenSlots = slots(1, 10);
+        Collection<SlotDto> tenSlots = slots(2, 11);
 
-        AvailabilityListDto actual = logic.calculateAvailableSlots(noBusy, tenSlots, firstDate, firstDate);
-        Iterator<DateAvailability> daysIterator = actual.getDays().iterator();
+        List<SlotDto> availableSlots = logic.calculateAvailableSlots(noBusy, tenSlots, firstDate, firstDate).getDays().stream()
+                .map(DateAvailability::getSlots)
+                .flatMap(Collection::stream)
+                .filter(SlotDto::isAvailable)
+                .collect(Collectors.toList());
 
-        assertTrue(daysIterator.hasNext());
-        assertEquals(10, daysIterator.next().getSlots().size());
+        assertEquals(10, availableSlots.size());
     }
 
     @Test
     public void test_complexLogic() {
         Collection<SlotDto> expectedSlots = Stream.of(
-                slots.stream().filter(s -> s.getSlotDefinitionId() == 4),
+                slots.stream().peek(s -> s.setAvailable(s.getSlotDefinitionId() == 4)),
                 slots.stream(),
-                slots.stream().filter(s -> s.getSlotDefinitionId() == 1)
+                slots.stream().peek(s -> s.setAvailable(s.getSlotDefinitionId() == 1))
         )
                 .flatMap(s -> s)
                 .collect(Collectors.toList());
@@ -118,7 +122,7 @@ public class AvailabilityCalculationLogicTest {
 
     private Collection<SlotDto> slots(int firstId, int lastId) {
         return IntStream.rangeClosed(firstId, lastId)
-                .mapToObj(id -> new SlotDto(id, LocalTime.now(), 30))
+                .mapToObj(id -> new SlotDto(id, LocalTime.now(), 30, true))
                 .collect(Collectors.toList());
     }
 

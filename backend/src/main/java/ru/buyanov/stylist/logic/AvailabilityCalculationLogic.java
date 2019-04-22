@@ -37,7 +37,7 @@ public class AvailabilityCalculationLogic {
                 .map(date -> {
                     Collection<Integer> busySlotsForDate = busySlotsPerDate.getOrDefault(date, Collections.emptySet());
                     Collection<SlotDto> availableSlots = slots.stream()
-                            .filter(slot -> !busySlotsForDate.contains(slot.getSlotDefinitionId()))
+                            .peek(slot -> slot.setAvailable(!busySlotsForDate.contains(slot.getSlotDefinitionId())))
                             .collect(Collectors.toList());
                     return new DateAvailability(date, availableSlots);
                 })

@@ -13,4 +13,5 @@ public class SlotDto {
     int slotDefinitionId;
     LocalTime start;
     int duration;
+    boolean available;
 }
