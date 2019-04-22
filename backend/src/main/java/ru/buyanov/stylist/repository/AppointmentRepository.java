@@ -21,7 +21,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     }
 
     @Query( "SELECT " +
-            "  new ru.buyanov.stylist.model.projection.StylistsBusyPerDay(" +
+            "  new ru.buyanov.stylist.model.projection.BusySlot(" +
             "    a.date, " +
             "    a.slotDefinitionId " +
             "  )" +
